@@ -54,7 +54,7 @@ export class IpController {
       fs.appendFileSync("/etc/nginx/conf.d/proxy.conf", config);
 
       // Reload Nginx to apply the changes
-      exec("nginx -s reload", (error, stdout) => {
+      exec("sudo nginx -s reload", (error, stdout) => {
         if (error) {
           console.error(`Error reloading Nginx: ${error}`);
           return;
