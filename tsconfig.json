@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "target": "es2020",
+    "module": "es2020",
+    "allowJs": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "typeRoots": ["./node_modules/@types"],
+    "sourceMap": true,
+    "outDir": "dist",
+    "strict": true,
+    "lib": ["es2020", "esnext.asynciterable"],
+    "baseUrl": "src",
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@api/*": ["api/*"],
+      "@config/*": ["config/*"],
+      "@setup/*": ["setup/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
