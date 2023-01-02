@@ -1,25 +1,52 @@
+import { exec } from "child_process";
 import { Request, Response } from "express";
+import fs from "fs";
 
 export class IpController {
   static async issueIp(req: Request, res: Response): Promise<void> {
     try {
-      const { user, projectName } = req.body;
+      const { slug, ip } = req.body;
 
-      if (!user) {
+      if (!slug) {
         res.status(400).send({
           success: false,
-          message: "provide username",
+          message: "provide slug",
         });
         return;
       }
 
-      if (!projectName) {
+      if (!ip) {
         res.status(400).send({
           success: false,
-          message: "provide projectName",
+          message: "provide ip",
         });
         return;
       }
+
+      const config = `server {
+        listen 9080 ssl;
+        server_name ${slug}.codenative.link;
+    
+        location / {
+            proxy_pass http://${ip}:9080;
+        }
+    
+        ssl_certificate /etc/letsencrypt/live/codenative.link/fullchain.pem; # managed by Certbot
+        ssl_certificate_key /etc/letsencrypt/live/codenative.link/privkey.pem; # managed by Certbot
+        include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+        ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+    }`;
+
+      fs.appendFileSync("/etc/nginx/conf.d/proxy.conf", config);
+
+      // Reload Nginx to apply the changes
+      exec("nginx -s reload", (error, stdout) => {
+        if (error) {
+          console.error(`Error reloading Nginx: ${error}`);
+          return;
+        }
+        console.log(`Nginx reloaded: ${stdout}`);
+      });
 
       res.status(200).send({
         success: true,
