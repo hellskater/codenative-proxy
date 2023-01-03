@@ -98,7 +98,7 @@ export class IpController {
       const modifiedConfig = config.replace(regex, "");
 
       // Rewrite the configuration file with the updated lines
-      fs.writeFileSync("/etc/nginx/conf.d/default.conf", modifiedConfig);
+      fs.writeFileSync("/etc/nginx/conf.d/proxy.conf", modifiedConfig);
 
       // Reload Nginx to apply the changes
       exec("sudo nginx -s reload", (error, stdout) => {
